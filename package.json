@@ -1,0 +1,57 @@
+{
+  "name": "nodejs-ts-rest-mvc-express-sequelize-jwt-zod-swagger-db-eslint-test",
+  "version": "1.0.0",
+  "description": "Node.js - TypeScript - Rest - MVC - Express - Sequelize - JWT - Zod - Swagger - DB - Eslint - Test",
+  "main": "dist",
+  "scripts": {
+    "compile": "RMDIR /S /Q dist&npx tsc -w",
+    "test": "node --env-file .env --test dist",
+    "start": "node --env-file .env dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peralva/nodejs-ts-rest-mvc-express-sequelize-jwt-zod-swagger-db-eslint-test.git"
+  },
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "rest",
+    "mvc",
+    "express",
+    "sequelize",
+    "jwt",
+    "zod",
+    "swagger",
+    "db",
+    "eslint",
+    "test"
+  ],
+  "author": "Bruno Peralva (brunoperalva@hotmail.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/peralva/nodejs-ts-rest-mvc-express-sequelize-jwt-zod-swagger-db-eslint-test/issues"
+  },
+  "homepage": "https://github.com/peralva/nodejs-ts-rest-mvc-express-sequelize-jwt-zod-swagger-db-eslint-test#readme",
+  "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^6.4.0",
+    "express": "^4.18.3",
+    "jsonwebtoken": "^9.0.2",
+    "sequelize": "^6.37.1",
+    "sqlite3": "^5.1.7",
+    "swagger-ui-express": "^5.0.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.11.30",
+    "@types/sequelize": "^4.28.20",
+    "@types/swagger-ui-express": "^4.1.6",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "source-map-support": "^0.5.21",
+    "typescript": "^5.4.2"
+  }
+}

@@ -1,2 +1,2 @@
-# nodejs-ts-express-sequelize-jwt-zod-swagger-db-eslint
-Node.js - TypeScript - Express - Sequelize - JWT - Zod - Swagger - DB - Eslint
+# nodejs-ts-express-sequelize-jwt-zod-swagger-db-eslint-test
+Node.js - TypeScript - Express - Sequelize - JWT - Zod - Swagger - DB - Eslint - Test

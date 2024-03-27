@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import { existsSync, readdirSync } from 'node:fs';
-import http from 'node:http';
+import http, { IncomingHttpHeaders } from 'node:http';
 import express, { Application, Request, Response } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 import { ZodError, z } from 'zod';
@@ -177,6 +177,30 @@ const middlewareGetPathParams = (req: Request) => {
     return urlPath.join('/');
 };
 
+const middlewareGetOrder = (headers: IncomingHttpHeaders) => {
+    if (typeof headers.order === 'string') {
+        const result: [string, string?][] = [];
+
+        const order = headers.order.split(', ');
+
+        order.forEach((value) => {
+            const valueSplitted = value.split(' ');
+
+            const subResult: [string, string?] = [valueSplitted[0]];
+
+            if (valueSplitted.length === 2) {
+                subResult.push(valueSplitted[1]);
+            }
+
+            result.push(subResult);
+        });
+
+        return result;
+    }
+
+    return [];
+};
+
 const middlewareGetLimitAndOffset = (req: Request) => {
     const customHeaders = z.object({
         limit: z.preprocess(
@@ -211,8 +235,8 @@ const middlewareRouters = async (
     req: Request,
     res: Response,
     requestBody: unknown,
-    offset: number,
-    limit: number,
+    order: [string, string?][],
+    limitAndOffset: object,
     user?: User,
 ) => {
     const pathFolder = `${PATH_DYNAMIC_ROUTERS}${req.path.toLowerCase()}`;
@@ -251,14 +275,14 @@ const middlewareRouters = async (
     }
 
     const responseBody: unknown = await controller.default({
+        res,
         headers,
         params,
         query,
         body,
-        offset: req.method === 'GET' ? offset : undefined,
-        limit: req.method === 'GET' ? limit : undefined,
         user,
-        res,
+        order,
+        ...limitAndOffset,
     });
 
     if (false
@@ -340,17 +364,15 @@ export default async () => {
 
     app.use(async (req: Request, res: Response) => {
         let shutdownCountSubtract;
-        let requestBody;
         let responseBody;
-        let user;
-        let offset;
-        let limit;
 
         try {
             shutdownCountSubtract = middlewareShutdownSum();
 
-            requestBody = await middlewareGetBody(req);
+            let requestBody = await middlewareGetBody(req);
             requestBody = await middlewareBodyToJSON(requestBody);
+
+            let user;
 
             if (true
                 && req.method !== 'OPTIONS'
@@ -382,12 +404,19 @@ export default async () => {
 
             req.url = middlewareGetPathParams(req);
 
+            const order = middlewareGetOrder(req.headers);
+
             const limitAndOffset = middlewareGetLimitAndOffset(req);
-            offset = limitAndOffset.offset;
-            limit = limitAndOffset.limit;
 
             if (req.method !== 'OPTIONS') {
-                responseBody = await middlewareRouters(req, res, requestBody, offset, limit, user);
+                responseBody = await middlewareRouters(
+                    req,
+                    res,
+                    requestBody,
+                    order,
+                    limitAndOffset,
+                    user,
+                );
 
                 if (typeof responseBody === 'number') {
                     responseBody = responseBody.toString();

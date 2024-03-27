@@ -1,12 +1,16 @@
+import { Order } from 'sequelize';
 import User from '../../models/User.js';
 
 export default async ({
+    order,
     offset,
     limit,
 }: {
+    order: Order,
     offset: number,
     limit: number
 }) => await User.findAll({
+    order,
     offset,
     limit,
 });

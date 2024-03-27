@@ -1,12 +1,16 @@
+import { Order } from 'sequelize';
 import Client from '../../models/Client.js';
 
 export default async ({
+    order,
     offset,
     limit,
 }: {
+    order: Order,
     offset: number,
     limit: number
 }) => await Client.findAll({
+    order,
     offset,
     limit,
 });

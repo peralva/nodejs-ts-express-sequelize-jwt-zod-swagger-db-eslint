@@ -138,6 +138,7 @@ const middlewareValidateUser = async (payload: JwtPayload) => z.custom<User>().p
             alias: {
                 __filename,
                 function: 'validateUser',
+                user_id: payload.user_id,
             },
         },
     ),
